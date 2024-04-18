@@ -1,0 +1,45 @@
+#!/bin/bash
+# Programa realitzat per Carlos Jose Urbina Romero
+
+dirsource="./"
+comptador=0
+
+if [ $# -ne 0 ]; then
+	for p in "$@"
+	do
+		if [ ${#p} -ne 1 ] || [[ $p =~ [A-Z] ]]; then
+			echo "El parametre $p no es valid els seus arxius no es copiaran "
+		fi
+	done
+fi
+
+for filename in $(ls $dirsource)
+do
+	for mesuras in $(ls $filename)
+	do
+		if [ -d $filename ]; then
+
+
+			if [ $# -eq 0 ]; then
+
+				cp ./$filename/$mesuras ./"${mesuras%%.*}_$filename.${mesuras##*.}"
+				let comptador++
+
+			else
+
+				for i in "$@"
+				do
+					if [ $i = "${mesuras%%.*}" ]; then
+						cp ./$filename/$mesuras ./"${mesuras%%.*}_$filename.${mesuras##*.}"
+						let comptador++
+					fi
+				done
+
+			fi
+
+		fi
+	done
+
+done
+
+echo "S'han copiat $comptador fitxers de mostres."
